@@ -1,0 +1,26 @@
+call db.schema.visualization()
+
+--------------------------------------------------------------------------------------------------------------------
+
+# Crimes under investigation by Officer Larive (Badge Number 26-5234182).
+
+MATCH (c:Crime {last_outcome: 'Under investigation'})-[i:INVESTIGATED_BY]->(o:Officer {badge_no: '26-5234182', surname: 'Larive'})
+return *
+
+---------------------------------------------------------------------------------------------------------------------
+# Drug Crimes under investigation by Officer Larive (Badge Number 26-5234182).
+MATCH (c:Crime {last_outcome: 'Under investigation', type: 'Drugs'})-[i:INVESTIGATED_BY]->(o:Officer {badge_no: '26-5234182', surname: 'Larive'})
+return *
+
+--------------------------------------------------------------------------------------------------------------------------
+# Shortest Path between any two Person partying to crime
+MATCH (c:Crime {last_outcome: 'Under investigation', type: 'Drugs'})-[:INVESTIGATED_BY]->(:Officer {badge_no: '26-5234182'}),
+(c)<-[:PARTY_TO]-(p:Person)
+WITH COLLECT(p) AS persons
+UNWIND persons AS p1
+UNWIND persons AS p2
+WITH * WHERE id(p1) < id(p2)
+MATCH path = allshortestpaths((p1)-[:KNOWS|KNOWS_LW|KNOWS_SN|FAMILY_REL|KNOWS_PHONE*..3]-(p2))
+RETURN path
+
+---------------------------------------------------------------------------------------------------------------------------

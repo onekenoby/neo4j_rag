@@ -1,0 +1,163 @@
+
+====================================================================================
+# Insert Sample data
+CREATE (TheMatrix:Movie {title: 'The Matrix', released: 1999, tagline: 'Welcome to the Real World'})
+CREATE (TheMatrixReloaded:Movie {title: 'The Matrix Reloaded', released: 2003, tagline: 'Reload Before the Revolution'})
+CREATE (Keanu:Person {name: 'Keanu Reeves', born: 1964})
+CREATE (Carrie:Person {name: 'Carrie-Anne Moss', born: 1967})
+CREATE (Laurence:Person {name: 'Laurence Fishburne', born: 1961})
+CREATE (Hugo:Person {name: 'Hugo Weaving', born: 1960})
+CREATE (Keanu)-[:ACTED_IN {roles: ['Neo']}]->(TheMatrix)
+CREATE (Carrie)-[:ACTED_IN {roles: ['Trinity']}]->(TheMatrix)
+CREATE (Laurence)-[:ACTED_IN {roles: ['Morpheus']}]->(TheMatrix)
+CREATE (Hugo)-[:ACTED_IN {roles: ['Agent Smith']}]->(TheMatrix)
+CREATE (Keanu)-[:ACTED_IN {roles: ['Neo']}]->(TheMatrixReloaded)
+CREATE (Carrie)-[:ACTED_IN {roles: ['Trinity']}]->(TheMatrixReloaded)
+CREATE (Laurence)-[:ACTED_IN {roles: ['Morpheus']}]->(TheMatrixReloaded)
+CREATE (Hugo)-[:ACTED_IN {roles: ['Agent Smith']}]->(TheMatrixReloaded);
+
+ 
+=================================================================================
+# GraphQL Schema
+
+type Movie {
+  title: String!
+  released: Int
+  tagline: String
+  actors: [Person!]! @relationship(type: "ACTED_IN", direction: IN)
+}
+
+type Person {
+  name: String!
+  born: Int
+  movies: [Movie!]! @relationship(type: "ACTED_IN", direction: OUT)
+}
+
+
+============================================================================
+# query to fetch all movies along with their actors:
+query {
+  movies {
+    title
+    released
+    tagline
+    actors {
+      name
+      born
+    }
+  }
+}
+
+===============================================================================
+# Query: Fetch Movies Released After 2000
+query {
+  movies(where: { released_GT: 2000 }) {
+    title
+    released
+    tagline
+    actors {
+      name
+    }
+  }
+}
+================================================================================
+# mutation to add a new movie and associate it with an existing actor:
+mutation {
+  createMovies(input: [
+    {
+      title: "John Wick",
+      released: 2014,
+      tagline: "Don't set him off",
+      actors: {
+        connect: {
+          where: {
+            node: {
+              name: "Keanu Reeves"
+            }
+          }
+        }
+      }
+    }
+  ]) {
+    movies {
+      title
+      released
+      tagline
+      actors {
+        name
+        born
+      }
+    }
+  }
+}
+
+
+==================================================================================
+# Query: Fetch Movies Released After 2000
+query {
+  movies(where: { released_GT: 2000 }) {
+    title
+    released
+    tagline
+    actors {
+      name
+    }
+  }
+}
+
+=======================================================================
+# Mutation: Update Movie Tagline
+mutation {
+  updateMovies(where: { title: "The Matrix" }, update: { tagline: "The Matrix has you..." }) {
+    movies {
+      title
+      tagline
+    }
+  }
+}
+
+==========================================================================
+#Mutation: Delete a Movie
+mutation {
+  deleteMovies(where: { title: "The Matrix Reloaded" }) {
+    nodesDeleted
+  }
+}
+ 
+
+
+===============================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GraphQL is clearly not perfect! It’s important to be aware of some of the challenges that come from introducing GraphQL in a system:
+
+1. Some well-understood practices from REST don’t apply:
+   HTTP status codes
+   Caching
+
+2. The n+1 query problem - the nested nature of GraphQL operations can lead to multiple requests to the data layer(s) to resolve a request
+==============================================================================
+

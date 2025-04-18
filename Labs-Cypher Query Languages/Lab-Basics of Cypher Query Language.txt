@@ -1,0 +1,23 @@
+Query: Retrieving All Nodes of a Particular Type
+
+MATCH (m:Movie)
+RETURN m
+
+
+Query: Retrieving Specific Properties
+
+MATCH (m:Movie)
+RETURN m.title, m.releaseYear
+
+
+Query: Filtering Results
+
+MATCH (m:Movie)
+WHERE m.releaseYear > 2000
+RETURN m.title, m.released
+
+
+Query: Counting Nodes
+
+MATCH (m:Movie)
+RETURN count(m) AS NumberOfMovies

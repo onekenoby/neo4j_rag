@@ -1,0 +1,79 @@
+Section: MERGE, WITH, and RETURN
+
+
+
+Query: Using MERGE
+
+MERGE (m:Movie {title: 'The Matrix'})
+ON CREATE SET m.released = 1999, m.duration = 136
+RETURN m
+
+
+Query: Using MERGE with Relationships
+
+MERGE (a:Person {name: 'Keanu Reeves'})
+MERGE (m:Movie {title: 'The Matrix'})
+ON CREATE SET m.released = 1999, m.duration = 136
+MERGE (a)-[:ACTED_IN]->(m)
+RETURN a, m
+
+
+Query: Using MERGE with Patterns
+
+
+MATCH (a:Person {name: 'Keanu Reeves'})
+MATCH (m:Movie {title: 'The Matrix'})
+MERGE (a)-[:ACTED_IN]->(m)
+RETURN a, m
+
+
+Query: Using MERGE to Avoid Duplicates
+
+
+MERGE (m:Movie {title: 'The Matrix'})
+ON CREATE SET m.released = 1999, m.duration = 136
+
+
+Query: Using WITH to Chain Queries
+
+
+MATCH (a:Person{name: 'Keanu Reeves'})-[:ACTED_IN]->(m)
+WITH a, m
+MATCH (m)-[:DIRECTED_BY]->(d:Person)
+RETURN a, m, d
+
+
+Query : Using WITH for Aggregation
+
+MATCH (a:Person)-[:ACTED_IN]->(m)
+WITH a, count(m) as movies
+RETURN a.name, movies
+ORDER BY movies DESC
+
+
+Query: Using RETURN with DISTINCT
+
+
+MATCH (a:Person)-[:ACTED_IN]->(m)
+RETURN DISTINCT a.name
+
+
+Query: Using RETURN with LIMIT
+
+MATCH (a:Person)-[:ACTED_IN]->(m)
+RETURN a.name, m.title
+LIMIT 5
+
+
+Query: Using RETURN with ORDER BY
+
+MATCH (a:Person)-[:ACTED_IN]->(m)
+RETURN a.name, m.title
+ORDER BY a.name, m.title
+
+
+
+
+
+
+

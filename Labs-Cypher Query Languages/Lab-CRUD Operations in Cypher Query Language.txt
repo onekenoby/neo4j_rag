@@ -1,0 +1,53 @@
+Section: CRUD Operations
+
+
+Query : Creating a Node
+
+CREATE (m:Movie {title: 'Inception', released: 2010, duration: 148})
+RETURN m
+
+
+
+Query: Creating a Relationship
+
+CREATE (a:Person {name: 'Leonardo DiCaprio'})
+WITH a
+MATCH (m:Movie {title: 'Inception'})
+CREATE (a)-[:ACTED_IN]->(m)
+RETURN a, m
+
+
+
+Query: Reading Data
+
+MATCH (m:Movie)
+RETURN m.title, m.released
+
+
+
+Query: Reading Data with a Filter
+
+MATCH (m:Movie)
+WHERE m.released> 2000
+RETURN m.title, m.released
+
+
+Query: Updating a Node
+
+MATCH (m:Movie {title: 'Inception'})
+SET m.duration = 150
+RETURN m
+
+
+Query: Adding a New Property
+
+MATCH (m:Movie {title: 'Inception'})
+SET m.genre = 'Science Fiction'
+RETURN m
+
+
+Query: Deleting a Node
+
+MATCH (m:Movie {title: 'Inception'})
+DETACH DELETE m
+

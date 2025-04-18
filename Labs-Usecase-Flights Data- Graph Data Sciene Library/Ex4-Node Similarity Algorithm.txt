@@ -1,0 +1,30 @@
+# Node similarity
+
+CALL gds.nodeSimilarity.stream('routes')
+YIELD node1, node2, similarity
+WITH gds.util.asNode(node1) AS n1, gds.util.asNode(node2) AS n2, similarity
+RETURN
+    n1.iata AS iata,
+    n1.city AS city,
+    COLLECT({iata:n2.iata, city:n2.city, similarityScore: similarity}) AS similarAirports
+ORDER BY city LIMIT 20
+
+-----------------------------------------------------------------------------------
+# Node similarity: topN and bottomN
+CALL gds.nodeSimilarity.stream(
+    'routes',
+    {
+        topK: 1,
+        topN: 10
+    }
+)
+YIELD node1, node2, similarity
+WITH gds.util.asNode(node1) AS n1, gds.util.asNode(node2) AS n2, similarity AS similarityScore
+RETURN
+    n1.iata AS iata,
+    n1.city AS city,
+    {iata:n2.iata, city:n2.city} AS similarAirport,
+    similarityScore
+ORDER BY city
+
+------------------------------------------------------------------------------------

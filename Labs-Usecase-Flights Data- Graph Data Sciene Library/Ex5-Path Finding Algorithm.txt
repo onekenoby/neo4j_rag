@@ -1,0 +1,34 @@
+# Creating a weighted graph projection
+
+CALL gds.graph.project(
+    'routes-weighted',
+    'Airport',
+    'HAS_ROUTE',
+    {
+        relationshipProperties: 'distance'
+    }
+) YIELD
+    graphName, nodeProjection, nodeCount, relationshipProjection, relationshipCount
+
+------------------------------------------------------------------------------------
+# Dijkstra’s algorithm: calculating the shortest path given a source node
+
+MATCH (source:Airport {iata: 'DEN'}), (target:Airport {iata: 'MLE'})
+CALL gds.shortestPath.dijkstra.stream('routes-weighted', {
+    sourceNode: source,
+    targetNode: target,
+    relationshipWeightProperty: 'distance'
+})
+YIELD index, sourceNode, targetNode, totalCost, nodeIds, costs, path
+RETURN
+    index,
+    gds.util.asNode(sourceNode).iata AS sourceNodeName,
+    gds.util.asNode(targetNode).iata AS targetNodeName,
+    totalCost,
+    [nodeId IN nodeIds | gds.util.asNode(nodeId).iata] AS nodeNames,
+    costs,
+    nodes(path) as path
+ORDER BY index
+
+-----------------------------------------------------------------------------------
+

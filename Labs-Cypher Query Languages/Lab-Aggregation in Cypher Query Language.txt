@@ -1,0 +1,56 @@
+Section 4: Aggregation
+
+
+Query: Counting Nodes
+
+MATCH (m:Movie)
+RETURN COUNT(m) AS NumberOfMovies
+
+
+
+Query: Calculating the Average
+
+MATCH (m:Movie)
+RETURN AVG(m.released) AS AverageReleaseYear
+
+
+
+Query: Summing Values
+
+MATCH (m:Movie)
+RETURN SUM(m.duration) AS TotalDuration
+
+
+
+Query: Finding Minimum and Maximum Values
+
+MATCH (m:Movie)
+RETURN MIN(m.released) AS EarliestRelease, MAX(m.released) AS LatestRelease
+
+
+
+Query: Grouping and Aggregating
+
+MATCH (m:Movie)
+RETURN m.released COUNT(m) AS MoviesPerYear
+ORDER BY m.releaseYear
+
+
+Query: Grouping and Averaging
+
+MATCH (m:Movie)-[:HAS_GENRE]->(g:Genre)
+RETURN g.name AS Genre, AVG(m.rating) AS AverageRating
+ORDER BY AverageRating DESC
+
+
+Query: Finding the Actor with Most Movies
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+RETURN a.name AS Actor, COUNT(m) AS NumberOfMovies
+ORDER BY NumberOfMovies DESC
+LIMIT 1
+
+
+
+
+

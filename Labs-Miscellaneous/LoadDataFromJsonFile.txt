@@ -1,0 +1,7 @@
+CALL apoc.load.json("file:///sample_data.json") YIELD value
+UNWIND value AS person
+CREATE (p:Person {name: person.name, born: person.born});
+
+
+MATCH (p:Person)
+RETURN p;

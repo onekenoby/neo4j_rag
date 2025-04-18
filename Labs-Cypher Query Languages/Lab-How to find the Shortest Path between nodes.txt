@@ -1,0 +1,19 @@
+shortestPath function
+
+
+MATCH (a1:Person {name: 'Keanu Reeves'}), (a2:Person {name: 'Carrie-Anne Moss'})
+MATCH path = shortestPath((a1)-[*]-(a2))
+RETURN path
+
+
+
+allShortestPaths function
+
+MATCH (a1:Person {name: 'Keanu Reeves'}), (a2:Person {name: 'Carrie-Anne Moss'})
+MATCH path = allShortestPaths((a1)-[*]-(a2))
+RETURN path
+
+
+
+
+

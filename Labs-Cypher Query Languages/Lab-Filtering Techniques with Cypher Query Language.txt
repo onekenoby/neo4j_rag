@@ -1,0 +1,37 @@
+Section: Filtering
+
+Query: Filtering Based on Properties
+
+MATCH (m:Movie)
+WHERE m.title = 'The Matrix'
+RETURN m
+
+
+Query: Filtering with Logical Operators
+
+MATCH (m:Movie)
+WHERE m.released >= 2000 AND m.released <= 2010
+RETURN m.title, m.released
+
+
+Query: Pattern-Based Filtering
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+WHERE m.released > 2000
+RETURN a.name, m.title, m.released
+
+
+Query: Using List Functions
+
+MATCH (m:Movie)<-[:ACTED_IN]-(a:Person)
+WITH m, collect(a) AS actors
+WHERE size(actors) > 1
+RETURN m.title, size(actors) AS NumberOfActors
+
+
+Query: Filtering with Regular Expressions
+
+MATCH (m:Movie)
+WHERE m.title STARTS WITH 'The'
+RETURN m.title
+

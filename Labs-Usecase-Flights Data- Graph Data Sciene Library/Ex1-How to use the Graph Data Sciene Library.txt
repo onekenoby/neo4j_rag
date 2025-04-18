@@ -1,0 +1,18 @@
+# Understanding Schema
+CALL db.schema.visualization()
+
+=================================================================================
+# Create a graph projection of the routes between all airports:
+CALL gds.graph.project(
+    'routes',
+    'Airport',
+    'HAS_ROUTE'
+)
+YIELD
+    graphName, nodeProjection, nodeCount, relationshipProjection, relationshipCount
+
+This is a very simple graph projection, but it is possible to add multiple node types and relationship types as well as properties for each of the nodes and relationships. 
+
+-----------------------------------------------------------------------------------
+
+

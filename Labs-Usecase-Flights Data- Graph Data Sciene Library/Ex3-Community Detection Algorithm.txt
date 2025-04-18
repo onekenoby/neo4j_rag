@@ -1,0 +1,9 @@
+CALL gds.louvain.stream('routes')
+YIELD nodeId, communityId
+WITH gds.util.asNode(nodeId) AS n, communityId
+RETURN
+	communityId,
+    SIZE(COLLECT(n)) AS numberOfAirports,
+	COLLECT(DISTINCT n.city) AS cities
+ORDER BY numberOfAirports DESC, communityId;
+-----------------------------------------------------------------------------------

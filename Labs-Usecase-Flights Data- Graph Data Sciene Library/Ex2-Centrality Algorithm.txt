@@ -1,0 +1,20 @@
+CALL gds.pageRank.stream('routes')
+YIELD nodeId, score
+WITH gds.util.asNode(nodeId) AS n, score AS pageRank
+RETURN n.iata AS iata, n.descr AS description, pageRank
+ORDER BY pageRank DESC, iata ASC
+
+-----------------------------------------------------------------------------------
+CALL gds.pageRank.write('routes',
+    {
+        writeProperty: 'pageRank'
+    }
+)
+YIELD nodePropertiesWritten, ranIterations
+
+-----------------------------------------------------------------------------------
+MATCH (a:Airport)
+RETURN a.iata AS iata, a.descr AS description, a.pageRank AS pageRank
+ORDER BY a.pageRank DESC, a.iata ASC
+
+-----------------------------------------------------------------------------------

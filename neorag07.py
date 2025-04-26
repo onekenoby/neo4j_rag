@@ -8,16 +8,23 @@ from pyvis.network import Network
 import streamlit.components.v1 as components
 from io import StringIO
 from langdetect import detect
-
+from dotenv import load_dotenv
 # CONFIG
-os.environ["GEMINI_API_KEY"] = "AIzaSyBCdgHWrwSfxuYV1Bv_UtN2ZMKmAsOAujI"
+
+load_dotenv()
+NEO4J_URI = os.getenv("NEO4J_URI")
+NEO4J_USER = os.getenv("NEO4J_USERNAME")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
+GEMINI_API_KEY = os.getenv("GOOGLE_API_KEY")
+
+#os.environ["GEMINI_API_KEY"] = "AIzaSyBCdgHWrwSfxuYV1Bv_UtN2ZMKmAsOAujI"
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 model = genai.GenerativeModel(model_name="models/gemini-2.0-flash")
 
-NEO4J_URI = "bolt://127.0.0.1:7690"
-NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "onekenoby"
+#NEO4J_URI = "bolt://127.0.0.1:7690"
+#NEO4J_USER = "neo4j"
+#NEO4J_PASSWORD = "onekenoby"
 
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 

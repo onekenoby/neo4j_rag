@@ -10,7 +10,7 @@ from io import StringIO
 from langdetect import detect
 
 # CONFIG
-os.environ["GEMINI_API_KEY"] = "AIzaSyBCdgHWrwSfxuYV1Bv_UtN2ZMKmAsOAujI"
+os.environ["GEMINI_API_KEY"] = "xxx"
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 model = genai.GenerativeModel(model_name="models/gemini-2.0-flash")
